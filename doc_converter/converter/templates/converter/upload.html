@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Documentos</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons.css' %}">
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 style="text-align: center; margin-bottom: 1.5rem;">Conversor de Documentos</h1>
+        
+        {% if error %}
+            <div style="padding: 1rem; background: #ffebee; color: #d32f2f; 
+                      border-radius: 4px; margin-bottom: 1.5rem;">
+                <strong>Erro:</strong> {{ error }}
+            </div>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_original_file" class="form-label">Selecione o arquivo:</label>
+                <input type="file" name="original_file" id="id_original_file" 
+                       class="form-control" accept=".pdf,.docx,.jpg,.jpeg,.png" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_target_format" class="form-label">Converter para:</label>
+                <select name="target_format" id="id_target_format" class="form-select" required>
+                    <option value="">Selecione um formato...</option>
+                    <option value="docx">DOCX (Word)</option>
+                    <option value="pdf">PDF</option>
+                    <option value="jpg">JPG (Imagem)</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+                <span>🔄</span> Converter Arquivo
+            </button>
+        </form>
+        
+        {% if converted_file_url %}
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #e8f5e9; 
+                      color: #2e7d32; border-radius: 4px; text-align: center;">
+                <p>Conversão concluída com sucesso!</p>
+                <a href="{{ converted_file_url }}" download class="btn btn-primary" 
+                   style="display: inline-block; margin-top: 0.5rem;">
+                    <span>⬇️</span> Baixar Arquivo
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

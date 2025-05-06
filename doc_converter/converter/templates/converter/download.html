@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download - Conversor Universal</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/buttons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cards.css' %}">
+    <style>
+        
+        .download-wrapper {
+            max-width: 600px; 
+            margin: 2rem auto;
+        }
+        .converter-card {
+            padding: 1.5rem; 
+        }
+        .file-icon {
+            font-size: 2.5rem; 
+        }
+        .file-info {
+            margin: 1rem 0;
+            padding: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="download-wrapper">
+        {% if converted_file_url %}
+        <div class="converter-card">
+            <div class="file-icon">
+                {% if file_type == 'DOCX' %}📄
+                {% elif file_type == 'PDF' %}📑
+                {% elif file_type == 'JPG' %}🖼️
+                {% else %}⬇️
+                {% endif %}
+            </div>
+            <h2 style="margin-bottom: 0.5rem;">Conversão concluída!</h2>
+            
+            <div class="file-info">
+                <p style="margin: 0.3rem 0;"><strong>Arquivo:</strong> {{ filename }}</p>
+                <p style="margin: 0.3rem 0;">
+                    <strong>Formato:</strong> {{ file_type }} 
+                    <span style="margin: 0 10px">•</span>
+                    <strong>Tamanho:</strong> {{ file_size|filesizeformat }}
+                </p>
+            </div>
+            
+            <div style="margin-top: 1.5rem;">
+                <a href="{{ converted_file_url }}" download class="btn btn-primary" style="display: inline-flex;">
+                    <span style="margin-right: 8px;">⬇️</span> Baixar Arquivo
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="alert alert-error">
+            <h2 style="margin-top: 0;">❌ Erro no processamento</h2>
+            <p>{{ error|default:"Não foi possível completar a conversão." }}</p>
+        </div>
+        {% endif %}
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+            <a href="/" class="btn btn-secondary">
+                &larr; Converter novo arquivo
+            </a>
+        </div>
+    </div>
+</body>
+</html>
